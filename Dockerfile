@@ -8,13 +8,13 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Cài đặt các dependencies
-RUN npm install --production
+RUN npm install
 
 # Copy toàn bộ source code vào container
 COPY . .
 
-# Build dự án (nếu bạn sử dụng TypeScript)
-RUN npm run build
+# Build dự án bằng npx
+RUN npx nest build
 
 # Expose port mà NestJS sẽ chạy
 EXPOSE 3000
