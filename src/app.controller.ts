@@ -14,4 +14,9 @@ export class AppController {
   getTest(): string {
     return 'test';
   }
+
+  @Get('/test2')
+  getTest2(): string {
+    return 'Hello admin';
+  }
 }
