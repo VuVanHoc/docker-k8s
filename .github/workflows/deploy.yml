@@ -27,13 +27,19 @@ jobs:
         docker build -t hocvv111999/nestjs-app:latest .
         docker push hocvv111999/nestjs-app:latest
 
-  deploy:
-    needs: build
+  deployment:
     runs-on: ubuntu-latest
+    needs: build
+    name: Deploy to EC2
     steps:
-    - name: Set up Kubectl
-      run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > keypair.pem && chmod 600 keypair.pem
-        ssh -o StrictHostKeyChecking=no -i keypair.pem ${{ secrets.SSH_HOST }} '
-        source ~/.nvm/nvm.sh && node -v
-        kubectl set image deployment/nestjs-deployment nestjs=hocvv111999/nestjs-app:latest
+      - uses: actions/checkout@v3
+      - name: Execute SSH commmands on remote server
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > keypair.pem && chmod 600 keypair.pem
+          ssh -o StrictHostKeyChecking=no -i keypair.pem ${{ secrets.SSH_HOST }} 
+          '
+          source ~/.nvm/nvm.sh && node -v
+          kubectl set image deployment/nestjs-deployment nestjs=hocvv111999/nestjs-app:latest
+          '
+          
+
