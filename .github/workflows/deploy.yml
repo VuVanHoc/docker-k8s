@@ -33,6 +33,7 @@ jobs:
     steps:
     - name: Set up Kubectl
       run: |
-        sudo apt-get update && sudo apt-get install -y kubectl
-        kubectl config set-cluster minikube
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > keypair.pem && chmod 600 keypair.pem
+        ssh -o StrictHostKeyChecking=no -i keypair.pem ${{ secrets.SSH_HOST }} '
+        source ~/.nvm/nvm.sh && node -v
         kubectl set image deployment/nestjs-deployment nestjs=hocvv111999/nestjs-app:latest
