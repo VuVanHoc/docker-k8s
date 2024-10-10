@@ -27,21 +27,21 @@ jobs:
           docker build -t hocvv111999/nestjs-app:latest .
           docker push hocvv111999/nestjs-app:latest
 
-  deployment:
-    runs-on: ubuntu-latest
-    needs: build
-    name: Deploy to EC2
-    steps:
-      - uses: actions/checkout@v3
+  # deployment:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   name: Deploy to EC2
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Set up SSH agent and add private key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+  #     - name: Set up SSH agent and add private key
+  #       uses: webfactory/ssh-agent@v0.5.3
+  #       with:
+  #         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Execute SSH commands on remote server
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            source ~/.nvm/nvm.sh && node -v
-            kubectl set image deployment/nestjs-deployment nestjs=hocvv111999/nestjs-app:latest
-          EOF
+  #     - name: Execute SSH commands on remote server
+  #       run: |
+  #         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+  #           source ~/.nvm/nvm.sh && node -v
+  #           kubectl set image deployment/nestjs-deployment nestjs=hocvv111999/nestjs-app:latest
+  #         EOF
