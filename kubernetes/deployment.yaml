@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nestjs-app
+  name: nestjs-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: nestjs-app
+      app: nestjs
   template:
     metadata:
       labels:
-        app: nestjs-app
+        app: nestjs
     spec:
       containers:
-      - name: nestjs-app
-        image: hocvv111999/nestjs-app:latest
+      - name: nestjs
+        image: hocvv111999/nestjs-app
         ports:
         - containerPort: 3000
 ---
@@ -23,9 +23,11 @@ kind: Service
 metadata:
   name: nestjs-service
 spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-    targetPort: 3000
+  type: NodePort
   selector:
-    app: nestjs-app
+    app: nestjs
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+      nodePort: 30080
